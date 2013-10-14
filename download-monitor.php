@@ -9,7 +9,7 @@ Author URI: http://mikejolley.com
 Requires at least: 3.5
 Tested up to: 3.6
 
-	Copyright: © 2013 Mike Jolley.
+	Copyright: ï¿½ 2013 Mike Jolley.
 	License: GNU General Public License v3.0
 	License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -314,7 +314,7 @@ class WP_DLM {
 						'parent' 				=> __( 'Parent Download', 'download_monitor' )
 					),
 				'description' => __( 'This is where you can create and manage downloads for your site.', 'download_monitor' ),
-				'public' 				=> false,
+				'public' 				=> true,
 				'show_ui' 				=> true,
 				'capability_type' 		=> 'post',
 				'capabilities' => array(
@@ -328,27 +328,27 @@ class WP_DLM {
 					'delete_post' 			=> 'manage_downloads',
 					'read_post' 			=> 'manage_downloads'
 				),
-				'publicly_queryable' 	=> false,
-				'exclude_from_search' 	=> true,
+				'publicly_queryable' 	=> true,
+				'exclude_from_search' 	=> false,
 				'hierarchical' 			=> false,
 				'rewrite' 				=> false,
-				'query_var' 			=> false,
+				'query_var' 			=> true,
 				'supports' 				=> apply_filters( 'dlm_cpt_dlm_download_supports', array( 'title', 'editor', 'excerpt', 'thumbnail', 'custom-fields' ) ),
-				'has_archive' 			=> false,
-				'show_in_nav_menus' 	=> false
+				'has_archive' 			=> true,
+				'show_in_nav_menus' 	=> true
 			) )
 		);
 
 		register_post_type( "dlm_download_version",
 			apply_filters( 'dlm_cpt_dlm_download_version_args', array(
-				'public' 				=> false,
-				'show_ui' 				=> false,
-				'publicly_queryable' 	=> false,
-				'exclude_from_search' 	=> true,
+				'public' 				=> true,
+				'show_ui' 				=> true,
+				'publicly_queryable' 	=> true,
+				'exclude_from_search' 	=> false,
 				'hierarchical' 			=> false,
 				'rewrite' 				=> false,
-				'query_var'				=> false,
-				'show_in_nav_menus' 	=> false
+				'query_var'				=> true,
+				'show_in_nav_menus' 	=> true
 			) )
 		);
 	}
