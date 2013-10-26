@@ -69,7 +69,7 @@ class WP_DLM_Ajax_Handler {
 		$size    = intval( $_POST['size'] );
 
 		$file = array(
-			'post_title'   => 'Download #' . $post_id . ' File Version',
+			'post_title'   => 'download',
 			'post_content' => '',
 			'post_status'  => 'publish',
 			'post_author'  => get_current_user_id(),
@@ -80,6 +80,7 @@ class WP_DLM_Ajax_Handler {
 		$file_id        = wp_insert_post( $file );
 		$i              = $size;
 		$file_version 	= '';
+		$file_name		= '';
 		$file_post_date = current_time( 'mysql' );
 		$file_download_count 		= 0;
 		$file_urls      = array();

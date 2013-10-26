@@ -108,7 +108,7 @@ class DLM_Admin_Insert {
 
 					// File
 					$file = array(
-						'post_title'   => 'Download #' . $download_id . ' File Version',
+						'post_title'   => $title,
 						'post_content' => '',
 						'post_status'  => 'publish',
 						'post_author'  => get_current_user_id(),

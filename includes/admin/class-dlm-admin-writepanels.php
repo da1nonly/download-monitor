@@ -103,6 +103,8 @@ class DLM_Admin_Writepanels {
 						$i++;
 						$file_id    = $file->ID;
 						$file_version 	= ( $file_version = get_post_meta( $file->ID, 'version', true ) ) ? $file_version : '';
+						$file_duration 	= ( $file_duration = get_post_meta( $file->ID, 'duration', true ) ) ? $file_duration : '';
+						$file_name = get_the_title($file->ID);
 						$file_post_date = $file->post_date;
 						$file_download_count 		= absint( get_post_meta( $file->ID, 'download_count', true ) );
 						$file_urls      = array_filter( (array) get_post_meta( $file->ID, 'files', true ) );
@@ -407,8 +409,10 @@ class DLM_Admin_Writepanels {
 		if ( isset( $_POST['downloadable_file_id'] ) ) {
 
 			$downloadable_file_id 			= $_POST['downloadable_file_id'];
+			$downloadable_file_name 		= $_POST['downloadable_file_name'];
 			$downloadable_file_menu_order	= $_POST['downloadable_file_menu_order'];
 			$downloadable_file_version		= $_POST['downloadable_file_version'];
+			$downloadable_file_duration		= $_POST['downloadable_file_duration'];
 			$downloadable_file_urls			= $_POST['downloadable_file_urls'];
 			$downloadable_file_date			= $_POST['downloadable_file_date'];
 			$downloadable_file_date_hour	= $_POST['downloadable_file_date_hour'];
@@ -421,8 +425,10 @@ class DLM_Admin_Writepanels {
 					continue;
 
 				$file_id             = absint( $downloadable_file_id[ $i ] );
+				$file_name			 = sanitize_text_field( $downloadable_file_name[ $i ] );
 				$file_menu_order     = absint( $downloadable_file_menu_order[ $i ] );
 				$file_version        = strtolower( sanitize_text_field( $downloadable_file_version[ $i ] ) );
+				$file_duration        = strtolower( sanitize_text_field( $downloadable_file_duration[ $i ] ) );
 				$file_date_hour      = absint( $downloadable_file_date_hour[ $i ] );
 				$file_date_minute    = absint( $downloadable_file_date_minute[ $i ] );
 				$file_date           = sanitize_text_field( $downloadable_file_date[ $i ] );
@@ -433,7 +439,7 @@ class DLM_Admin_Writepanels {
 					continue;
 
 				// Generate a useful post title
-				$file_post_title = 'Download #' . $post_id . ' File Version';
+				$file_post_title = $file_name;
 
 				// Generate date
 				if ( empty( $file_date ) ) {
@@ -451,6 +457,7 @@ class DLM_Admin_Writepanels {
 				), array( 'ID' => $file_id ) );
 
 				// Update post meta
+				update_post_meta( $file_id, 'duration', $file_duration );
 				update_post_meta( $file_id, 'version', $file_version );
 				update_post_meta( $file_id, 'files', $files );
 
