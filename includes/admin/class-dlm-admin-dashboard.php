@@ -38,12 +38,12 @@ class DLM_Admin_Dashboard {
     		'order'          => 'desc',
     		'meta_query'     => array(
     			array(
-	    			'key'     => '_download_count',
+	    			'key'     => 'download_count',
 	    			'value'   => '0',
 	    			'compare' => '>'
     			)
     		),
-    		'meta_key'       => '_download_count',
+    		'meta_key'       => 'download_count',
     		'fields'         => 'ids'
     	);
 
@@ -57,7 +57,7 @@ class DLM_Admin_Dashboard {
     	$downloads    = array();
 
     	foreach ( $download_ids as $download_id ) {
-    		$downloads[ $download_id ] = get_post_meta( $download_id, '_download_count', true );
+    		$downloads[ $download_id ] = get_post_meta( $download_id, 'download_count', true );
     	}
 
     	if ( $downloads )

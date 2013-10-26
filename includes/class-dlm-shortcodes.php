@@ -33,7 +33,7 @@ class DLM_Shortcodes {
 		return $wpdb->get_var( "
 			SELECT SUM( meta_value ) FROM $wpdb->postmeta
 			LEFT JOIN $wpdb->posts on $wpdb->postmeta.post_id = $wpdb->posts.ID
-			WHERE meta_key = '_download_count'
+			WHERE meta_key = 'download_count'
 			AND post_type = 'media'
 			AND post_status = 'publish'
 		" );
@@ -260,7 +260,7 @@ class DLM_Shortcodes {
 			case 'count' :
 			case 'download_count' :
 				$orderby  = 'meta_value';
-				$meta_key = '_download_count';
+				$meta_key = 'download_count';
 				break;
 			default :
 				$orderby = 'title';

@@ -104,7 +104,7 @@ class DLM_Admin_CPT {
 
 			switch( $post_type ) {
 				case 'media' :
-					if ( $versions =& get_children( 'post_parent=' . $id . '&post_type=dlm_download_version' ) )
+					if ( $versions =& get_children( 'post_parent=' . $id . '&post_type=media_file' ) )
 						if ( $versions )
 							foreach ( $versions as $child )
 								wp_delete_post( $child->ID, true );
@@ -295,7 +295,7 @@ class DLM_Admin_CPT {
 
 			elseif ( 'download_count' == $vars['orderby'] )
 				$vars = array_merge( $vars, array(
-					'meta_key' 	=> '_download_count',
+					'meta_key' 	=> 'download_count',
 					'orderby' 	=> 'meta_value_num'
 				) );
 

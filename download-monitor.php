@@ -173,16 +173,16 @@ class WP_DLM {
 
 		$collate = '';
 
-	    if ( $wpdb->has_cap( 'collation' ) ) {
+		if ( $wpdb->has_cap( 'collation' ) ) {
 			if( ! empty( $wpdb->charset ) )
 				$collate .= "DEFAULT CHARACTER SET $wpdb->charset";
 			if( ! empty( $wpdb->collate ) )
 				$collate .= " COLLATE $wpdb->collate";
-	    }
+		}
 
-	    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
-	    $dlm_tables = "
+		$dlm_tables = "
 	CREATE TABLE {$wpdb->download_log} (
 	  ID bigint(20) NOT NULL auto_increment,
 	  type varchar(200) NOT NULL default 'download',
@@ -199,7 +199,7 @@ class WP_DLM {
 	  KEY attribute_name (download_id)
 	) $collate;
 	";
-	    dbDelta( $dlm_tables );
+		dbDelta( $dlm_tables );
 	}
 
 	/**
@@ -233,123 +233,175 @@ class WP_DLM {
 		 * Taxonomies
 		 */
 		register_taxonomy( 'dlm_download_category',
-	        array( 'media' ),
-	        array(
-	            'hierarchical' 			=> true,
-	            'update_count_callback' => '_update_post_term_count',
-	            'label' 				=> __( 'Categories', 'download_monitor'),
-	            'labels' => array(
-	                    'name' 				=> __( 'Categories', 'download_monitor'),
-	                    'singular_name' 	=> __( 'Download Category', 'download_monitor'),
-	                    'search_items' 		=> __( 'Search Download Categories', 'download_monitor'),
-	                    'all_items' 		=> __( 'All Download Categories', 'download_monitor'),
-	                    'parent_item' 		=> __( 'Parent Download Category', 'download_monitor'),
-	                    'parent_item_colon' => __( 'Parent Download Category:', 'download_monitor'),
-	                    'edit_item' 		=> __( 'Edit Download Category', 'download_monitor'),
-	                    'update_item' 		=> __( 'Update Download Category', 'download_monitor'),
-	                    'add_new_item' 		=> __( 'Add New Download Category', 'download_monitor'),
-	                    'new_item_name' 	=> __( 'New Download Category Name', 'download_monitor')
-	            	),
-	            'show_ui' 				=> true,
-	            'query_var' 			=> true,
-	            'capabilities'			=> array(
-	            	'manage_terms' 		=> 'manage_downloads',
-	            	'edit_terms' 		=> 'manage_downloads',
-	            	'delete_terms' 		=> 'manage_downloads',
-	            	'assign_terms' 		=> 'manage_downloads',
-	            ),
-	            'rewrite' 				=> false,
-	            'show_in_nav_menus'     => false
-	        )
-	    );
-
+			array( 'media', 'media_file' ),
+			array(
+				'hierarchical'    => true,
+				'update_count_callback' => '_update_post_term_count',
+				'label'     => __( 'Categories', 'download_monitor'),
+				'labels' => array(
+					'name'     => __( 'Categories', 'download_monitor'),
+					'singular_name'  => __( 'Media Category', 'download_monitor'),
+					'search_items'   => __( 'Search Media Categories', 'download_monitor'),
+					'all_items'   => __( 'All Media Categories', 'download_monitor'),
+					'parent_item'   => __( 'Parent Media Category', 'download_monitor'),
+					'parent_item_colon' => __( 'Parent Media Category:', 'download_monitor'),
+					'edit_item'   => __( 'Edit Media Category', 'download_monitor'),
+					'update_item'   => __( 'Update Media Category', 'download_monitor'),
+					'add_new_item'   => __( 'Add New Media Category', 'download_monitor'),
+					'new_item_name'  => __( 'New Media Category Name', 'download_monitor')
+				),
+				'show_ui'     => true,
+				'query_var'    => true,
+				'capabilities'   => array(
+					'manage_terms'   => 'manage_downloads',
+					'edit_terms'   => 'manage_downloads',
+					'delete_terms'   => 'manage_downloads',
+					'assign_terms'   => 'manage_downloads',
+				),
+				'rewrite'     => false,
+				'show_in_nav_menus'     => false
+			)
+		);
+		
+		register_taxonomy( 'register_taxonomy_reciter',
+			array( 'media', 'media_file' ),
+			array(
+				'hierarchical'    => true,
+				'update_count_callback' => '_update_post_term_count',
+				'label'     => __( 'Reciters', 'download_monitor'),
+				'labels' => array(
+					'name'     => __( 'Reciters', 'download_monitor'),
+					'singular_name'  => __( 'Reciters', 'download_monitor'),
+					'search_items'   => __( 'Search Reciters', 'download_monitor'),
+					'all_items'   => __( 'All Reciters', 'download_monitor'),
+					'parent_item'   => __( 'Parent Reciters', 'download_monitor'),
+					'parent_item_colon' => __( 'Parent Reciters:', 'download_monitor'),
+					'edit_item'   => __( 'Edit Reciter', 'download_monitor'),
+					'update_item'   => __( 'Update Reciters', 'download_monitor'),
+					'add_new_item'   => __( 'Add New Reciter', 'download_monitor'),
+					'new_item_name'  => __( 'New Reciters Name', 'download_monitor')
+				),
+				'show_ui'     => true,
+				'query_var'    => true,
+				'capabilities'   => array(
+					'manage_terms'   => 'manage_downloads',
+					'edit_terms'   => 'manage_downloads',
+					'delete_terms'   => 'manage_downloads',
+					'assign_terms'   => 'manage_downloads',
+				),
+				'rewrite'     => true,
+				'show_in_nav_menus'     => true
+			)
+		);
+		
 		register_taxonomy( 'dlm_download_tag',
-	        array( 'media' ),
-	        array(
-	            'hierarchical' 			=> false,
-	            'label' 				=> __( 'Tags', 'download_monitor'),
-	            'labels' => array(
-	                    'name' 				=> __( 'Tags', 'download_monitor'),
-	                    'singular_name' 	=> __( 'Download Tag', 'download_monitor'),
-	                    'search_items' 		=> __( 'Search Download Tags', 'download_monitor'),
-	                    'all_items' 		=> __( 'All Download Tags', 'download_monitor'),
-	                    'parent_item' 		=> __( 'Parent Download Tag', 'download_monitor'),
-	                    'parent_item_colon' => __( 'Parent Download Tag:', 'download_monitor'),
-	                    'edit_item' 		=> __( 'Edit Download Tag', 'download_monitor'),
-	                    'update_item' 		=> __( 'Update Download Tag', 'download_monitor'),
-	                    'add_new_item' 		=> __( 'Add New Download Tag', 'download_monitor'),
-	                    'new_item_name' 	=> __( 'New Download Tag Name', 'download_monitor')
-	            	),
-	            'show_ui' 				=> true,
-	            'query_var' 			=> true,
-	            'capabilities'			=> array(
-	            	'manage_terms' 		=> 'manage_downloads',
-	            	'edit_terms' 		=> 'manage_downloads',
-	            	'delete_terms' 		=> 'manage_downloads',
-	            	'assign_terms' 		=> 'manage_downloads',
-	            ),
-	            'rewrite' 				=> false,
-	            'show_in_nav_menus'     => false
-	        )
-	    );
-
-	    /**
+			array( 'media', 'media_file' ),
+			array(
+				'hierarchical'    => false,
+				'label'     => __( 'Tags', 'download_monitor'),
+				'labels' => array(
+					'name'     => __( 'Tags', 'download_monitor'),
+					'singular_name'  => __( 'Media Tag', 'download_monitor'),
+					'search_items'   => __( 'Search Media Tags', 'download_monitor'),
+					'all_items'   => __( 'All Media Tags', 'download_monitor'),
+					'parent_item'   => __( 'Parent Media Tag', 'download_monitor'),
+					'parent_item_colon' => __( 'Parent Media Tag:', 'download_monitor'),
+					'edit_item'   => __( 'Edit Media Tag', 'download_monitor'),
+					'update_item'   => __( 'Update Media Tag', 'download_monitor'),
+					'add_new_item'   => __( 'Add New Media Tag', 'download_monitor'),
+					'new_item_name'  => __( 'New Media Tag Name', 'download_monitor')
+				),
+				'show_ui'     => true,
+				'query_var'    => true,
+				'capabilities'   => array(
+					'manage_terms'   => 'manage_downloads',
+					'edit_terms'   => 'manage_downloads',
+					'delete_terms'   => 'manage_downloads',
+					'assign_terms'   => 'manage_downloads',
+				),
+				'rewrite'     => true,
+				'show_in_nav_menus'     => true
+			)
+		);
+		
+		
+		
+		
+		
+		/**
 		 * Post Types
 		 */
 		register_post_type( "media",
 			apply_filters( 'dlm_cpt_dlm_download_args', array(
-				'labels' => array(
-						'name' 					=> __( 'Downloads', 'download_monitor' ),
-						'singular_name' 		=> __( 'Download', 'download_monitor' ),
-						'add_new' 				=> __( 'Add New', 'download_monitor' ),
-						'add_new_item' 			=> __( 'Add Download', 'download_monitor' ),
-						'edit' 					=> __( 'Edit', 'download_monitor' ),
-						'edit_item' 			=> __( 'Edit Download', 'download_monitor' ),
-						'new_item' 				=> __( 'New Download', 'download_monitor' ),
-						'view' 					=> __( 'View Download', 'download_monitor' ),
-						'view_item' 			=> __( 'View Download', 'download_monitor' ),
-						'search_items' 			=> __( 'Search Downloads', 'download_monitor' ),
-						'not_found' 			=> __( 'No Downloads found', 'download_monitor' ),
-						'not_found_in_trash' 	=> __( 'No Downloads found in trash', 'download_monitor' ),
-						'parent' 				=> __( 'Parent Download', 'download_monitor' )
+					'labels' => array(
+						'name' => _x( 'Media', 'download_monitor' ),
+						'singular_name' => _x( 'media', 'download_monitor' ),
+						'add_new' => _x( 'Add New', 'download_monitor' ),
+						'all_items' => _x( 'Media', 'download_monitor' ),
+						'add_new_item' => _x( 'Add New media', 'download_monitor' ),
+						'edit_item' => _x( 'Edit media', 'download_monitor' ),
+						'new_item' => _x( 'New media', 'download_monitor' ),
+						'view_item' => _x( 'View media', 'download_monitor' ),
+						'search_items' => _x( 'Search Media', 'download_monitor' ),
+						'not_found' => _x( 'No media found', 'download_monitor' ),
+						'not_found_in_trash' => _x( 'No media found in Trash', 'download_monitor' ),
+						'parent_item_colon' => _x( 'Parent media:', 'download_monitor' ),
+						'menu_name' => _x( 'Media', 'download_monitor' )
+
 					),
-				'description' => __( 'This is where you can create and manage downloads for your site.', 'download_monitor' ),
-				'public' 				=> true,
-				'show_ui' 				=> true,
-				'capability_type' 		=> 'post',
-				'capabilities' => array(
-					'publish_posts' 		=> 'manage_downloads',
-					'edit_posts' 			=> 'manage_downloads',
-					'edit_others_posts' 	=> 'manage_downloads',
-					'delete_posts' 			=> 'manage_downloads',
-					'delete_others_posts'	=> 'manage_downloads',
-					'read_private_posts'	=> 'manage_downloads',
-					'edit_post' 			=> 'manage_downloads',
-					'delete_post' 			=> 'manage_downloads',
-					'read_post' 			=> 'manage_downloads'
-				),
-				'publicly_queryable' 	=> true,
-				'exclude_from_search' 	=> false,
-				'hierarchical' 			=> false,
-				'rewrite' 				=> false,
-				'query_var' 			=> true,
-				'supports' 				=> apply_filters( 'dlm_cpt_dlm_download_supports', array( 'title', 'editor', 'excerpt', 'thumbnail', 'custom-fields' ) ),
-				'has_archive' 			=> true,
-				'show_in_nav_menus' 	=> true
-			) )
+					'description' => __( 'This is where you can create and manage Albums for your site.', 'download_monitor' ),
+					'public'     => true,
+					'show_ui'     => true,
+					'capability_type'   => 'post',
+					'capabilities' => array(
+						'publish_posts'   => 'manage_downloads',
+						'edit_posts'    => 'manage_downloads',
+						'edit_others_posts'  => 'manage_downloads',
+						'delete_posts'    => 'manage_downloads',
+						'delete_others_posts' => 'manage_downloads',
+						'read_private_posts' => 'manage_downloads',
+						'edit_post'    => 'manage_downloads',
+						'delete_post'    => 'manage_downloads',
+						'read_post'    => 'manage_downloads'
+					),
+					'publicly_queryable'  => true,
+					'exclude_from_search'  => false,
+					'hierarchical'    => false,
+					'rewrite'     => true,
+					'query_var'    => true,
+					'supports'     => apply_filters( 'dlm_cpt_dlm_download_supports', array( 'title', 'editor', 'excerpt', 'thumbnail', 'custom-fields' ) ),
+					'has_archive'    => true,
+					'show_in_nav_menus'  => true
+				) )
 		);
 
 		register_post_type( "media_file",
 			apply_filters( 'dlm_cpt_dlm_download_version_args', array(
-				'public' 				=> true,
-				'show_ui' 				=> true,
-				'publicly_queryable' 	=> true,
-				'exclude_from_search' 	=> false,
-				'hierarchical' 			=> false,
-				'rewrite' 				=> false,
-				'query_var'				=> true,
-				'show_in_nav_menus' 	=> true
-			) )
+					'labels' => array(
+						'name' => _x( 'Media Files', 'media_files' ),
+						'singular_name' => _x( 'media_file', 'media_files' ),
+						'add_new' => _x( 'Add New', 'media_files' ),
+						'all_items' => _x( 'Media Files', 'media_files' ),
+						'add_new_item' => _x( 'Add New media_files', 'media_files' ),
+						'edit_item' => _x( 'Edit media_files', 'media_files' ),
+						'new_item' => _x( 'New media_files', 'media_files' ),
+						'view_item' => _x( 'View media_files', 'media_files' ),
+						'search_items' => _x( 'Search Media_Files', 'media_files' ),
+						'not_found' => _x( 'No media_files found', 'media_files' ),
+						'not_found_in_trash' => _x( 'No media_files found in Trash', 'media_files' ),
+						'parent_item_colon' => _x( 'Parent media_files:', 'media_files' ),
+						'menu_name' => _x( 'Media Files', 'media_files' ),
+					),
+					'public'     => true,
+					'show_ui'     => true,
+					'publicly_queryable'  => true,
+					'exclude_from_search'  => false,
+					'hierarchical'    => false,
+					'rewrite'     => true,
+					'query_var'    => true,
+					'supports'     => apply_filters( 'dlm_cpt_dlm_download_supports', array( 'title', 'editor', 'excerpt', 'thumbnail', 'custom-fields' ) ),
+					'show_in_nav_menus'  => true
+				) )
 		);
 	}
 
@@ -478,15 +530,15 @@ class WP_DLM {
 				if ( is_dir( $folder . '/' . $file ) ) {
 
 					$files[] = array(
-						'type' 	=> 'folder',
-						'path'	=> $folder . '/' . $file
+						'type'  => 'folder',
+						'path' => $folder . '/' . $file
 					);
 
 				} else {
 
 					$files[] = array(
-						'type' 	=> 'file',
-						'path'	=> $folder . '/' . $file
+						'type'  => 'file',
+						'path' => $folder . '/' . $file
 					);
 
 				}
@@ -509,14 +561,14 @@ class WP_DLM {
 
 		$files = array(
 			array(
-				'base' 		=> $upload_dir['basedir'] . '/dlm_uploads',
-				'file' 		=> '.htaccess',
-				'content' 	=> 'deny from all'
+				'base'   => $upload_dir['basedir'] . '/dlm_uploads',
+				'file'   => '.htaccess',
+				'content'  => 'deny from all'
 			),
 			array(
-				'base' 		=> $upload_dir['basedir'] . '/dlm_uploads',
-				'file' 		=> 'index.html',
-				'content' 	=> ''
+				'base'   => $upload_dir['basedir'] . '/dlm_uploads',
+				'file'   => 'index.html',
+				'content'  => ''
 			)
 		);
 

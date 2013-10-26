@@ -70,7 +70,7 @@ class DLM_Widget_Downloads extends WP_Widget {
 
     	if ( $orderby == 'download_count' ) {
 	    	$args['orderby']  = 'meta_value';
-			$args['meta_key'] = '_download_count';
+			$args['meta_key'] = 'download_count';
     	}
 
     	if ( $featured == 'yes' ) {

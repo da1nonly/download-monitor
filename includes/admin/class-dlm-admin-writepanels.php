@@ -96,16 +96,16 @@ class DLM_Admin_Writepanels {
 			<div class="dlm-metaboxes downloadable_files">
 				<?php
 					$i     = -1;
-					$files = get_posts( 'post_parent=' . $post->ID . '&post_type=dlm_download_version&orderby=menu_order&order=ASC&post_status=any&numberposts=-1' );
+					$files = get_posts( 'post_parent=' . $post->ID . '&post_type=media_file&orderby=menu_order&order=ASC&post_status=any&numberposts=-1' );
 
 					if ( $files ) foreach ( $files as $file ) {
 
 						$i++;
 						$file_id    = $file->ID;
-						$file_version 	= ( $file_version = get_post_meta( $file->ID, '_version', true ) ) ? $file_version : '';
+						$file_version 	= ( $file_version = get_post_meta( $file->ID, 'version', true ) ) ? $file_version : '';
 						$file_post_date = $file->post_date;
-						$file_download_count 		= absint( get_post_meta( $file->ID, '_download_count', true ) );
-						$file_urls      = array_filter( (array) get_post_meta( $file->ID, '_files', true ) );
+						$file_download_count 		= absint( get_post_meta( $file->ID, 'download_count', true ) );
+						$file_urls      = array_filter( (array) get_post_meta( $file->ID, 'files', true ) );
 
 						include( 'html-downloadable-file-version.php' );
 					}
@@ -451,8 +451,8 @@ class DLM_Admin_Writepanels {
 				), array( 'ID' => $file_id ) );
 
 				// Update post meta
-				update_post_meta( $file_id, '_version', $file_version );
-				update_post_meta( $file_id, '_files', $files );
+				update_post_meta( $file_id, 'version', $file_version );
+				update_post_meta( $file_id, 'files', $files );
 
 				$filesize       = -1;
 				$main_file_path = current( $files );
@@ -460,19 +460,19 @@ class DLM_Admin_Writepanels {
 				if ( $main_file_path )
 					$filesize = $download_monitor->get_filesize( $main_file_path );
 
-				update_post_meta( $file_id, '_filesize', $filesize );
+				update_post_meta( $file_id, 'filesize', $filesize );
 
 				if ( $file_download_count !== '' ) {
-					update_post_meta( $file_id, '_download_count', absint( $file_download_count ) );
+					update_post_meta( $file_id, 'download_count', absint( $file_download_count ) );
 					$total_download_count += absint( $file_download_count );
 				} else {
-					$total_download_count += absint( get_post_meta( $file_id, '_download_count', true ) );
+					$total_download_count += absint( get_post_meta( $file_id, 'download_count', true ) );
 				}
 			}
 		}
 
 		// Sync download_count
-		update_post_meta( $post_id, '_download_count', $total_download_count );
+		update_post_meta( $post_id, 'download_count', $total_download_count );
 	}
 }
 

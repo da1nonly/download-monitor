@@ -104,7 +104,7 @@ class DLM_Admin_Insert {
 					update_post_meta( $download_id, '_featured', 'no' );
 					update_post_meta( $download_id, '_members_only', 'no' );
 					update_post_meta( $download_id, '_redirect_only', 'no' );
-					update_post_meta( $download_id, '_download_count', 0 );
+					update_post_meta( $download_id, 'download_count', 0 );
 
 					// File
 					$file = array(
@@ -122,9 +122,9 @@ class DLM_Admin_Insert {
 						throw new Exception( __( 'Error: File was not created.', 'download_monitor' ) );
 
 					// Meta
-					update_post_meta( $file_id, '_version', $version );
-					update_post_meta( $file_id, '_files', array( $url ) );
-					update_post_meta( $file_id, '_filesize', $download_monitor->get_filesize( $url ) );
+					update_post_meta( $file_id, 'version', $version );
+					update_post_meta( $file_id, 'files', array( $url ) );
+					update_post_meta( $file_id, 'filesize', $download_monitor->get_filesize( $url ) );
 
 					echo '<div class="updated"><p>' . __( 'Download successfully created.', 'download_monitor' ) . '</p></div>';
 
