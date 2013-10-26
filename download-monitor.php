@@ -88,7 +88,7 @@ class WP_DLM {
 	 */
 	public function plugin_links( $links ) {
 		$plugin_links = array(
-			'<a href="' . admin_url( 'edit.php?post_type=dlm_download&page=download-monitor-settings' ) . '">' . __( 'Settings', 'download_monitor' ) . '</a>',
+			'<a href="' . admin_url( 'edit.php?post_type=media&page=download-monitor-settings' ) . '">' . __( 'Settings', 'download_monitor' ) . '</a>',
 			'<a href="http://mikejolley.com/projects/download-monitor/add-ons/">' . __( 'Add-ons', 'download_monitor' ) . '</a>',
 			'<a href="https://github.com/mikejolley/download-monitor/wiki">' . __( 'Docs', 'download_monitor' ) . '</a>',
 		);

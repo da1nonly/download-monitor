@@ -244,9 +244,9 @@ class DLM_Admin {
 	 */
 	public function admin_menu() {
 		if ( get_option( 'dlm_enable_logging' ) == 1 )
-			add_submenu_page( 'edit.php?post_type=dlm_download', __( 'Logs', 'download_monitor' ), __( 'Logs', 'download_monitor' ), 'manage_options', 'download-monitor-logs', array( $this, 'log_viewer' ) );
+			add_submenu_page( 'edit.php?post_type=media', __( 'Logs', 'download_monitor' ), __( 'Logs', 'download_monitor' ), 'manage_options', 'download-monitor-logs', array( $this, 'log_viewer' ) );
 
-		add_submenu_page( 'edit.php?post_type=dlm_download', __( 'Settings', 'download_monitor' ), __( 'Settings', 'download_monitor' ), 'manage_options', 'download-monitor-settings', array( $this, 'settings_page' ) );
+		add_submenu_page( 'edit.php?post_type=media', __( 'Settings', 'download_monitor' ), __( 'Settings', 'download_monitor' ), 'manage_options', 'download-monitor-settings', array( $this, 'settings_page' ) );
 	}
 
 	/**

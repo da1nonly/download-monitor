@@ -69,7 +69,7 @@ class WP_DLM_Ajax_Handler {
 		$size    = intval( $_POST['size'] );
 
 		$file = array(
-			'post_title'   => 'download',
+			'post_title'   => $post_id,
 			'post_content' => '',
 			'post_status'  => 'publish',
 			'post_author'  => get_current_user_id(),
