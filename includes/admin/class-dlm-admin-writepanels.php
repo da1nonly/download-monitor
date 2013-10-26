@@ -26,13 +26,13 @@ class DLM_Admin_Writepanels {
 	 * @return void
 	 */
 	public function add_meta_boxes() {
-		add_meta_box( 'download-monitor-options', __( 'Download Options', 'download_monitor' ), array( $this, 'download_options' ), 'dlm_download', 'side', 'high' );
-		add_meta_box( 'download-monitor-file', __( 'Downloadable File Versions', 'download_monitor' ), array( $this, 'download_files' ), 'dlm_download', 'normal', 'high' );
+		add_meta_box( 'download-monitor-options', __( 'Download Options', 'download_monitor' ), array( $this, 'download_options' ), 'media', 'side', 'high' );
+		add_meta_box( 'download-monitor-file', __( 'Downloadable File Versions', 'download_monitor' ), array( $this, 'download_files' ), 'media', 'normal', 'high' );
 
 		// Excerpt
 		if ( function_exists('wp_editor') ) {
-			remove_meta_box( 'postexcerpt', 'dlm_download', 'normal' );
-			add_meta_box( 'postexcerpt', __('Short Description', 'download_monitor'), array( $this, 'short_description' ), 'dlm_download', 'normal', 'high' );
+			remove_meta_box( 'postexcerpt', 'media', 'normal' );
+			add_meta_box( 'postexcerpt', __('Short Description', 'download_monitor'), array( $this, 'short_description' ), 'media', 'normal', 'high' );
 		}
 	}
 
@@ -328,7 +328,7 @@ class DLM_Admin_Writepanels {
 				// Set post to 0 and set our custom type
 				dlm_upload_file_frame.on( 'ready', function() {
 					dlm_upload_file_frame.uploader.options.uploader.params = {
-						type: 'dlm_download'
+						type: 'media'
 					};
 				});
 
@@ -376,7 +376,7 @@ class DLM_Admin_Writepanels {
 		if ( is_int( wp_is_post_autosave( $post ) ) ) return;
 		if ( empty($_POST['dlm_nonce']) || ! wp_verify_nonce( $_POST['dlm_nonce'], 'save_meta_data' ) ) return;
 		if ( ! current_user_can( 'edit_post', $post_id ) ) return;
-		if ( $post->post_type != 'dlm_download' ) return;
+		if ( $post->post_type != 'media' ) return;
 
 		do_action( 'dlm_save_meta_boxes', $post_id, $post );
 	}

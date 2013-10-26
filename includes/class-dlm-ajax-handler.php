@@ -49,7 +49,7 @@ class WP_DLM_Ajax_Handler {
 
 		$file = get_post( intval( $_POST['file_id'] ) );
 
-		if ( $file && $file->post_type == "dlm_download_version" )
+		if ( $file && $file->post_type == "media_file" )
 			wp_delete_post( $file->ID );
 
 		die();
@@ -74,7 +74,7 @@ class WP_DLM_Ajax_Handler {
 			'post_status'  => 'publish',
 			'post_author'  => get_current_user_id(),
 			'post_parent'  => $post_id,
-			'post_type'    => 'dlm_download_version'
+			'post_type'    => 'media_file'
 		);
 
 		$file_id        = wp_insert_post( $file );

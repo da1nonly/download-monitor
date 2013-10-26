@@ -123,7 +123,7 @@ class WP_DLM {
 	 * @return void
 	 */
 	public function register_globals() {
-		$GLOBALS['dlm_download'] = null;
+		$GLOBALS['media'] = null;
 	}
 
 	/**
@@ -137,10 +137,10 @@ class WP_DLM {
 		if ( is_int( $post ) )
 			$post = get_post( $post );
 
-		if ( $post->post_type !== 'dlm_download' )
+		if ( $post->post_type !== 'media' )
 			return;
 
-		$GLOBALS['dlm_download'] = new DLM_Download( $post->ID );
+		$GLOBALS['media'] = new DLM_Download( $post->ID );
 	}
 
 	/**
@@ -227,13 +227,13 @@ class WP_DLM {
 	 */
 	public function init_taxonomy() {
 
-		if ( post_type_exists( "dlm_download" ) )
+		if ( post_type_exists( "media" ) )
 			return;
 		/**
 		 * Taxonomies
 		 */
 		register_taxonomy( 'dlm_download_category',
-	        array( 'dlm_download' ),
+	        array( 'media' ),
 	        array(
 	            'hierarchical' 			=> true,
 	            'update_count_callback' => '_update_post_term_count',
@@ -264,7 +264,7 @@ class WP_DLM {
 	    );
 
 		register_taxonomy( 'dlm_download_tag',
-	        array( 'dlm_download' ),
+	        array( 'media' ),
 	        array(
 	            'hierarchical' 			=> false,
 	            'label' 				=> __( 'Tags', 'download_monitor'),
@@ -296,7 +296,7 @@ class WP_DLM {
 	    /**
 		 * Post Types
 		 */
-		register_post_type( "dlm_download",
+		register_post_type( "media",
 			apply_filters( 'dlm_cpt_dlm_download_args', array(
 				'labels' => array(
 						'name' 					=> __( 'Downloads', 'download_monitor' ),
@@ -339,7 +339,7 @@ class WP_DLM {
 			) )
 		);
 
-		register_post_type( "dlm_download_version",
+		register_post_type( "media_file",
 			apply_filters( 'dlm_cpt_dlm_download_version_args', array(
 				'public' 				=> true,
 				'show_ui' 				=> true,

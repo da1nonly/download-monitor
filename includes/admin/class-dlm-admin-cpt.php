@@ -37,7 +37,7 @@ class DLM_Admin_CPT {
 	public function downloads_by_category( $show_counts = 1, $hierarchical = 1, $show_uncategorized = 1, $orderby = '' ) {
 		global $typenow, $wp_query;
 
-	    if ( $typenow != 'dlm_download' )
+	    if ( $typenow != 'media' )
 	    	return;
 
 		include_once( 'class-dlm-category-walker.php' );
@@ -103,7 +103,7 @@ class DLM_Admin_CPT {
 			$post_type = get_post_type( $id );
 
 			switch( $post_type ) {
-				case 'dlm_download' :
+				case 'media' :
 					if ( $versions =& get_children( 'post_parent=' . $id . '&post_type=dlm_download_version' ) )
 						if ( $versions )
 							foreach ( $versions as $child )
@@ -120,7 +120,7 @@ class DLM_Admin_CPT {
 	 * @return void
 	 */
 	public function enter_title_here( $text, $post ) {
-		if ( $post->post_type == 'dlm_download' )
+		if ( $post->post_type == 'media' )
 			return __( 'Download title', 'download_monitor' );
 		return $text;
 	}
@@ -135,7 +135,7 @@ class DLM_Admin_CPT {
 	public function post_updated_messages( $messages ) {
 		global $post, $post_ID;
 
-		$messages['dlm_download'] = array(
+		$messages['media'] = array(
 			0 => '', // Unused. Messages start at index 1.
 			1 => __('Download updated.', 'download_monitor'),
 			2 => __('Custom field updated.', 'download_monitor'),

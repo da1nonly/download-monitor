@@ -31,7 +31,7 @@ class DLM_Admin_Dashboard {
 
 		$args = array(
     		'post_status' 	 => 'publish',
-    		'post_type'      => 'dlm_download',
+    		'post_type'      => 'media',
     		'no_found_rows'  => 1,
     		'posts_per_page' => 10,
     		'orderby' 		 => 'meta_value',

@@ -86,7 +86,7 @@ class DLM_Download_Handler {
 			// Find real ID
 			switch ( $this->ep_value ) {
 				case 'slug' :
-					$download_id = absint( $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_name = '%s' AND post_type = 'dlm_download';", $raw_id ) ) );
+					$download_id = absint( $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_name = '%s' AND post_type = 'media';", $raw_id ) ) );
 				break;
 				default :
 					$download_id = absint( $raw_id );

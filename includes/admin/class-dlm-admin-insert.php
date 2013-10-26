@@ -93,7 +93,7 @@ class DLM_Admin_Insert {
 					'post_content' => '',
 					'post_status'  => 'publish',
 					'post_author'  => get_current_user_id(),
-					'post_type'    => 'dlm_download'
+					'post_type'    => 'media'
 				);
 
 				$download_id = wp_insert_post( $download );
@@ -113,7 +113,7 @@ class DLM_Admin_Insert {
 						'post_status'  => 'publish',
 						'post_author'  => get_current_user_id(),
 						'post_parent'  => $download_id,
-						'post_type'    => 'dlm_download_version'
+						'post_type'    => 'media_file'
 					);
 
 					$file_id = wp_insert_post( $file );
@@ -139,7 +139,7 @@ class DLM_Admin_Insert {
 		// Get all downloads
 		$downloads = get_posts( array(
 			'post_status'    => 'publish',
-			'post_type'      => 'dlm_download',
+			'post_type'      => 'media',
 			'posts_per_page' => -1
 		) );
 		?>
@@ -264,7 +264,7 @@ class DLM_Admin_Insert {
 						'multipart_params'    => array(
 							'_ajax_nonce' => wp_create_nonce( 'file-upload' ),
 							'action'      => 'download_monitor_insert_panel_upload',
-							'type'        => 'dlm_download'
+							'type'        => 'media'
 						),
 					);
 

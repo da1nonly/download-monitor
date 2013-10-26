@@ -34,7 +34,7 @@ class DLM_Shortcodes {
 			SELECT SUM( meta_value ) FROM $wpdb->postmeta
 			LEFT JOIN $wpdb->posts on $wpdb->postmeta.post_id = $wpdb->posts.ID
 			WHERE meta_key = '_download_count'
-			AND post_type = 'dlm_download'
+			AND post_type = 'media'
 			AND post_status = 'publish'
 		" );
 	}
@@ -46,7 +46,7 @@ class DLM_Shortcodes {
 	 * @return void
 	 */
 	public function total_files() {
-		$count_posts = wp_count_posts( 'dlm_download' );
+		$count_posts = wp_count_posts( 'media' );
 
 		return $count_posts->publish;
 	}
@@ -100,7 +100,7 @@ class DLM_Shortcodes {
 	  		ob_start();
 
 			$downloads = new WP_Query( array(
-		    	'post_type'      => 'dlm_download',
+		    	'post_type'      => 'media',
 		    	'posts_per_page' => 1,
 		    	'no_found_rows'  => 1,
 		    	'post_status'    => 'publish',
@@ -268,7 +268,7 @@ class DLM_Shortcodes {
 		}
 
 	  	$args = array(
-	    	'post_type'      => 'dlm_download',
+	    	'post_type'      => 'media',
 	    	'posts_per_page' => $per_page,
 	    	'offset'         => $offset,
 	    	'no_found_rows'  => 1,

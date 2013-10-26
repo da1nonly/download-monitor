@@ -59,7 +59,7 @@ class DLM_Widget_Downloads extends WP_Widget {
 
     	$args = array(
     		'post_status' 	 => 'publish',
-    		'post_type'      => 'dlm_download',
+    		'post_type'      => 'media',
     		'no_found_rows'  => 1,
     		'posts_per_page' => $posts_per_page,
     		'orderby' 		 => $orderby,

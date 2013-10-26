@@ -65,7 +65,7 @@ class DLM_Admin {
 	 */
 	public function upload_dir( $pathdata ) {
 
-		if ( isset( $_POST['type'] ) && $_POST['type'] == 'dlm_download' ) {
+		if ( isset( $_POST['type'] ) && $_POST['type'] == 'media' ) {
 			if ( empty( $pathdata['subdir'] ) ) {
 				$pathdata['path']   = $pathdata['path'] . '/dlm_uploads';
 				$pathdata['url']    = $pathdata['url']. '/dlm_uploads';
@@ -217,13 +217,13 @@ class DLM_Admin {
 		$enqueue = false;
 
 		if ( $hook == 'post-new.php' || $hook == 'post.php' || $hook == 'edit.php' )
-			if ( ( ! empty( $_GET['post_type'] ) && $_GET['post_type'] == 'dlm_download' ) || ( ! empty( $post->post_type ) && 'dlm_download' === $post->post_type ) )
+			if ( ( ! empty( $_GET['post_type'] ) && $_GET['post_type'] == 'media' ) || ( ! empty( $post->post_type ) && 'media' === $post->post_type ) )
 				$enqueue = true;
 
 		if ( strstr( $hook, 'dlm_download_page' ) )
 			$enqueue = true;
 
-		if ( $hook == 'edit-tags.php' && strstr( $_GET['taxonomy'], 'dlm_download' ) )
+		if ( $hook == 'edit-tags.php' && strstr( $_GET['taxonomy'], 'media' ) )
 			$enqueue = true;
 
         if ( ! $enqueue )
