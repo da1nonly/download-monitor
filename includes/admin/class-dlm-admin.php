@@ -65,7 +65,7 @@ class DLM_Admin {
 	 */
 	public function upload_dir( $pathdata ) {
 
-		if ( isset( $_POST['type'] ) && $_POST['type'] == 'media' ) {
+		if ( isset( $_POST['type'] ) && $_POST['type'] == 'pirenko_portfolios' ) {
 			if ( empty( $pathdata['subdir'] ) ) {
 				$pathdata['path']   = $pathdata['path'] . '/dlm_uploads';
 				$pathdata['url']    = $pathdata['url']. '/dlm_uploads';
@@ -122,14 +122,14 @@ class DLM_Admin {
 					__( 'Endpoint', 'download_monitor' ),
 					array(
 						array(
-							'name' 		=> 'dlm_download_endpoint',
+							'name' 		=> 'pirenko_portfolios_endpoint',
 							'std' 		=> 'download',
 							'placeholder'	=> __( 'download', 'download_monitor' ),
 							'label' 	=> __( 'Download Endpoint', 'download_monitor' ),
 							'desc'		=> sprintf( __( 'Define what endpoint should be used for download links. By default this will be <code>%s</code>.', 'download_monitor' ), home_url( '/download/' ) )
 						),
 						array(
-							'name' 		=> 'dlm_download_endpoint_value',
+							'name' 		=> 'pirenko_portfolios_endpoint_value',
 							'std' 		=> 'ID',
 							'label' 	=> __( 'Endpoint Value', 'download_monitor' ),
 							'desc'		=> sprintf( __( 'Define what unique value should be used on the end of your endpoint to identify the downloadable file. e.g. ID would give a link like <code>%s</code>', 'download_monitor' ), home_url( '/download/10/' ) ),
@@ -217,13 +217,13 @@ class DLM_Admin {
 		$enqueue = false;
 
 		if ( $hook == 'post-new.php' || $hook == 'post.php' || $hook == 'edit.php' )
-			if ( ( ! empty( $_GET['post_type'] ) && $_GET['post_type'] == 'media' ) || ( ! empty( $post->post_type ) && 'media' === $post->post_type ) )
+			if ( ( ! empty( $_GET['post_type'] ) && $_GET['post_type'] == 'pirenko_portfolios' ) || ( ! empty( $post->post_type ) && 'pirenko_portfolios' === $post->post_type ) )
 				$enqueue = true;
 
-		if ( strstr( $hook, 'dlm_download_page' ) )
+		if ( strstr( $hook, 'pirenko_portfolios_page' ) )
 			$enqueue = true;
 
-		if ( $hook == 'edit-tags.php' && strstr( $_GET['taxonomy'], 'media' ) )
+		if ( $hook == 'edit-tags.php' && strstr( $_GET['taxonomy'], 'pirenko_portfolios' ) )
 			$enqueue = true;
 
         if ( ! $enqueue )
@@ -244,9 +244,9 @@ class DLM_Admin {
 	 */
 	public function admin_menu() {
 		if ( get_option( 'dlm_enable_logging' ) == 1 )
-			add_submenu_page( 'edit.php?post_type=media', __( 'Logs', 'download_monitor' ), __( 'Logs', 'download_monitor' ), 'manage_options', 'download-monitor-logs', array( $this, 'log_viewer' ) );
+			add_submenu_page( 'edit.php?post_type=pirenko_portfolios', __( 'Logs', 'download_monitor' ), __( 'Logs', 'download_monitor' ), 'manage_options', 'download-monitor-logs', array( $this, 'log_viewer' ) );
 
-		add_submenu_page( 'edit.php?post_type=media', __( 'Settings', 'download_monitor' ), __( 'Settings', 'download_monitor' ), 'manage_options', 'download-monitor-settings', array( $this, 'settings_page' ) );
+		add_submenu_page( 'edit.php?post_type=pirenko_portfolios', __( 'Settings', 'download_monitor' ), __( 'Settings', 'download_monitor' ), 'manage_options', 'download-monitor-settings', array( $this, 'settings_page' ) );
 	}
 
 	/**
@@ -386,9 +386,9 @@ class DLM_Admin {
 	    $DLM_Logging_List_Table->prepare_items();
 	    ?>
 	    <div class="wrap">
-	        <div id="icon-edit" class="icon32 icon32-posts-dlm_download"><br/></div>
+	        <div id="icon-edit" class="icon32 icon32-posts-pirenko_portfolios"><br/></div>
 
-	        <h2><?php _e( 'Download Logs', 'download_monitor' ); ?> <a href="<?php echo add_query_arg( 'dlm_download_logs', 'true' ); ?>" class="add-new-h2"><?php _e( 'Export CSV', 'download_monitor' ); ?></a> <a href="<?php echo wp_nonce_url( add_query_arg( 'dlm_delete_logs', 'true' ), 'delete_logs' ); ?>" class="add-new-h2"><?php _e( 'Delete Logs', 'download_monitor' ); ?></a></h2><br/>
+	        <h2><?php _e( 'Download Logs', 'download_monitor' ); ?> <a href="<?php echo add_query_arg( 'pirenko_portfolios_logs', 'true' ); ?>" class="add-new-h2"><?php _e( 'Export CSV', 'download_monitor' ); ?></a> <a href="<?php echo wp_nonce_url( add_query_arg( 'dlm_delete_logs', 'true' ), 'delete_logs' ); ?>" class="add-new-h2"><?php _e( 'Delete Logs', 'download_monitor' ); ?></a></h2><br/>
 	        <form id="dlm_logs">
 	        	<?php $DLM_Logging_List_Table->display() ?>
 	        </form>
@@ -416,7 +416,7 @@ class DLM_Admin {
 	public function export_logs() {
 		global $wpdb;
 
-		if ( empty( $_GET['dlm_download_logs'] ) )
+		if ( empty( $_GET['pirenko_portfolios_logs'] ) )
 			return;
 
 		$filter_status = isset( $_REQUEST['filter_status'] ) ? sanitize_text_field( $_REQUEST['filter_status'] ) : '';

@@ -3,8 +3,8 @@
  * Shows title only.
  */
 
-global $dlm_download;
+global $pirenko_portfolios;
 ?>
-<a class="download-link" title="<?php if ( $dlm_download->has_version_number() ) printf( __( 'Version %s', 'download_monitor' ), $dlm_download->get_the_version_number() ); ?>" href="<?php $dlm_download->the_download_link(); ?>" rel="nofollow">
-	<?php $dlm_download->the_title(); ?>
+<a class="download-link" title="<?php if ( $pirenko_portfolios->has_version_number() ) printf( __( 'Version %s', 'download_monitor' ), $pirenko_portfolios->get_the_version_number() ); ?>" href="<?php $pirenko_portfolios->the_download_link(); ?>" rel="nofollow">
+	<?php $pirenko_portfolios->the_title(); ?>
 </a>

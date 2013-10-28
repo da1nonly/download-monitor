@@ -16,13 +16,13 @@ class DLM_Download_Version {
 		$this->download_id = absint( $download_id );
 
 		// Get Version Data
-		$this->mirrors  = array_filter( (array) get_post_meta( $this->id, 'files', true ) );
+		$this->mirrors  = array_filter( (array) get_post_meta( $this->id, '_files', true ) );
 		$this->url      = current( $this->mirrors );
 		$this->filename = current( explode( '?', basename( $this->url ) ) );
 		$this->filetype = strtolower( substr( strrchr( $this->filename, "." ), 1 ) );
-		$this->version  = strtolower( get_post_meta( $this->id, 'version', true ) );
-		$this->download_count     = get_post_meta( $this->id, 'download_count', true );
-		$this->filesize = get_post_meta( $this->id, 'filesize', true );
+		$this->version  = strtolower( get_post_meta( $this->id, '_version', true ) );
+		$this->download_count     = get_post_meta( $this->id, '_download_count', true );
+		$this->filesize = get_post_meta( $this->id, '_filesize', true );
 
 		// If data is not set, load it
 		if ( $this->filesize == "" )
@@ -37,12 +37,12 @@ class DLM_Download_Version {
 	 */
 	public function increase_download_count() {
 		// File download_count
-		$this->download_count = absint( get_post_meta( $this->id, 'download_count', true ) ) + 1;
-		update_post_meta( $this->id, 'download_count', $this->download_count );
+		$this->download_count = absint( get_post_meta( $this->id, '_download_count', true ) ) + 1;
+		update_post_meta( $this->id, '_download_count', $this->download_count );
 
 		// Parent download download_count
-		$parent_download_count = absint( get_post_meta( $this->download_id, 'download_count', true ) ) + 1;
-		update_post_meta( $this->download_id, 'download_count', $parent_download_count );
+		$parent_download_count = absint( get_post_meta( $this->download_id, '_download_count', true ) ) + 1;
+		update_post_meta( $this->download_id, '_download_count', $parent_download_count );
 	}
 
 	/**
@@ -57,7 +57,7 @@ class DLM_Download_Version {
 
 		$filesize = $download_monitor->get_filesize( $file_path );
 
-		update_post_meta( $this->id, 'filesize', $filesize );
+		update_post_meta( $this->id, '_filesize', $filesize );
 
 		return $filesize;
 	}

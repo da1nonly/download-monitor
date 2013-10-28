@@ -17,8 +17,8 @@ class DLM_Download_Handler {
 	 * @return void
 	 */
 	public function __construct() {
-		$this->endpoint = ( $endpoint = get_option( 'dlm_download_endpoint' ) ) ? $endpoint : 'download';
-		$this->ep_value = ( $ep_value = get_option( 'dlm_download_endpoint_value' ) ) ? $ep_value : 'ID';
+		$this->endpoint = ( $endpoint = get_option( 'pirenko_portfolios_endpoint' ) ) ? $endpoint : 'download';
+		$this->ep_value = ( $ep_value = get_option( 'pirenko_portfolios_endpoint_value' ) ) ? $ep_value : 'ID';
 
 		add_filter( 'query_vars', array( $this, 'add_query_vars'), 0 );
 		add_action( 'init', array( $this, 'add_endpoint'), 0 );
@@ -86,7 +86,7 @@ class DLM_Download_Handler {
 			// Find real ID
 			switch ( $this->ep_value ) {
 				case 'slug' :
-					$download_id = absint( $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_name = '%s' AND post_type = 'media';", $raw_id ) ) );
+					$download_id = absint( $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_name = '%s' AND post_type = 'pirenko_portfolios';", $raw_id ) ) );
 				break;
 				default :
 					$download_id = absint( $raw_id );
@@ -164,7 +164,7 @@ class DLM_Download_Handler {
 		$version->increase_download_count();
 
 		// Trigger Download Action
-		do_action( 'dlm_downloading', $download, $version );
+		do_action( 'pirenko_portfoliosing', $download, $version );
 
 		// Redirect to the file...
 		if ( $download->redirect_only() || apply_filters( 'dlm_do_not_force', false, $download, $version ) ) {

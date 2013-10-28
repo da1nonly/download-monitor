@@ -31,19 +31,19 @@ class DLM_Admin_Dashboard {
 
 		$args = array(
     		'post_status' 	 => 'publish',
-    		'post_type'      => 'media',
+    		'post_type'      => 'pirenko_portfolios',
     		'no_found_rows'  => 1,
     		'posts_per_page' => 10,
     		'orderby' 		 => 'meta_value',
     		'order'          => 'desc',
     		'meta_query'     => array(
     			array(
-	    			'key'     => 'download_count',
+	    			'key'     => '_download_count',
 	    			'value'   => '0',
 	    			'compare' => '>'
     			)
     		),
-    		'meta_key'       => 'download_count',
+    		'meta_key'       => '_download_count',
     		'fields'         => 'ids'
     	);
 
@@ -57,7 +57,7 @@ class DLM_Admin_Dashboard {
     	$downloads    = array();
 
     	foreach ( $download_ids as $download_id ) {
-    		$downloads[ $download_id ] = get_post_meta( $download_id, 'download_count', true );
+    		$downloads[ $download_id ] = get_post_meta( $download_id, '_download_count', true );
     	}
 
     	if ( $downloads )

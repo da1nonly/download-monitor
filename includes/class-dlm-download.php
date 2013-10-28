@@ -199,8 +199,8 @@ class DLM_Download {
 	 */
 	public function get_the_download_link() {
 		$scheme   = parse_url( get_option( 'home' ), PHP_URL_SCHEME );
-		$endpoint = ( $endpoint = get_option( 'dlm_download_endpoint' ) ) ? $endpoint : 'download';
-		$ep_value = get_option( 'dlm_download_endpoint_value' );
+		$endpoint = ( $endpoint = get_option( 'pirenko_portfolios_endpoint' ) ) ? $endpoint : 'download';
+		$ep_value = get_option( 'pirenko_portfolios_endpoint_value' );
 
 		switch ( $ep_value ) {
 			case 'slug' :
@@ -225,7 +225,7 @@ class DLM_Download {
 				$link = add_query_arg( 'v', $this->version_id, $link );
 		}
 
-		return apply_filters( 'dlm_download_get_the_download_link', esc_url_raw( $link ), $this, $this->version_id );
+		return apply_filters( 'pirenko_portfolios_get_the_download_link', esc_url_raw( $link ), $this, $this->version_id );
 	}
 
 	/**
@@ -434,7 +434,7 @@ class DLM_Download {
 	 */
 	function get_file_version_ids() {
 		if ( ! is_array( $this->file_version_ids ) ) {
-			$this->file_version_ids = get_posts( 'post_parent=' . $this->id . '&post_type=media_file&orderby=menu_order&order=ASC&fields=ids&post_status=publish&numberposts=-1' );
+			$this->file_version_ids = get_posts( 'post_parent=' . $this->id . '&post_type=pirenko_portfolios_version&orderby=menu_order&order=ASC&fields=ids&post_status=publish&numberposts=-1' );
 		}
 
 		return $this->file_version_ids;

@@ -93,7 +93,7 @@ class DLM_Admin_Insert {
 					'post_content' => '',
 					'post_status'  => 'publish',
 					'post_author'  => get_current_user_id(),
-					'post_type'    => 'media'
+					'post_type'    => 'pirenko_portfolios'
 				);
 
 				$download_id = wp_insert_post( $download );
@@ -104,7 +104,7 @@ class DLM_Admin_Insert {
 					update_post_meta( $download_id, '_featured', 'no' );
 					update_post_meta( $download_id, '_members_only', 'no' );
 					update_post_meta( $download_id, '_redirect_only', 'no' );
-					update_post_meta( $download_id, 'download_count', 0 );
+					update_post_meta( $download_id, '_download_count', 0 );
 
 					// File
 					$file = array(
@@ -113,7 +113,7 @@ class DLM_Admin_Insert {
 						'post_status'  => 'publish',
 						'post_author'  => get_current_user_id(),
 						'post_parent'  => $download_id,
-						'post_type'    => 'media_file'
+						'post_type'    => 'pirenko_portfolios_version'
 					);
 
 					$file_id = wp_insert_post( $file );
@@ -122,9 +122,9 @@ class DLM_Admin_Insert {
 						throw new Exception( __( 'Error: File was not created.', 'download_monitor' ) );
 
 					// Meta
-					update_post_meta( $file_id, 'version', $version );
-					update_post_meta( $file_id, 'files', array( $url ) );
-					update_post_meta( $file_id, 'filesize', $download_monitor->get_filesize( $url ) );
+					update_post_meta( $file_id, '_version', $version );
+					update_post_meta( $file_id, '_files', array( $url ) );
+					update_post_meta( $file_id, '_filesize', $download_monitor->get_filesize( $url ) );
 
 					echo '<div class="updated"><p>' . __( 'Download successfully created.', 'download_monitor' ) . '</p></div>';
 
@@ -139,7 +139,7 @@ class DLM_Admin_Insert {
 		// Get all downloads
 		$downloads = get_posts( array(
 			'post_status'    => 'publish',
-			'post_type'      => 'media',
+			'post_type'      => 'pirenko_portfolios',
 			'posts_per_page' => -1
 		) );
 		?>
@@ -264,7 +264,7 @@ class DLM_Admin_Insert {
 						'multipart_params'    => array(
 							'_ajax_nonce' => wp_create_nonce( 'file-upload' ),
 							'action'      => 'download_monitor_insert_panel_upload',
-							'type'        => 'media'
+							'type'        => 'pirenko_portfolios'
 						),
 					);
 

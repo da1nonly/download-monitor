@@ -188,7 +188,7 @@ class DLM_Logging_List_Table extends WP_List_Table {
 						<option value="200" <?php selected( $this->logs_per_page, 200 ) ?>><?php _e( '200 per page', 'download_monitor' ); ?></option>
 						<option value="-1" <?php selected( $this->logs_per_page, -1 ) ?>><?php _e( 'Show All', 'download_monitor' ); ?></option>
 					</select>
-					<input type="hidden" name="post_type" value="media" />
+					<input type="hidden" name="post_type" value="pirenko_portfolios" />
 					<input type="hidden" name="page" value="download-monitor-logs" />
 					<input type="submit" value="<?php _e( 'Filter', 'download_monitor' ); ?>" class="button" />
 				</div>

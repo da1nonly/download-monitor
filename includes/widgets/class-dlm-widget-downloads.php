@@ -59,7 +59,7 @@ class DLM_Widget_Downloads extends WP_Widget {
 
     	$args = array(
     		'post_status' 	 => 'publish',
-    		'post_type'      => 'media',
+    		'post_type'      => 'pirenko_portfolios',
     		'no_found_rows'  => 1,
     		'posts_per_page' => $posts_per_page,
     		'orderby' 		 => $orderby,
@@ -70,7 +70,7 @@ class DLM_Widget_Downloads extends WP_Widget {
 
     	if ( $orderby == 'download_count' ) {
 	    	$args['orderby']  = 'meta_value';
-			$args['meta_key'] = 'download_count';
+			$args['meta_key'] = '_download_count';
     	}
 
     	if ( $featured == 'yes' ) {

@@ -17,10 +17,10 @@ class DLM_Admin_CPT {
 		add_action( "restrict_manage_posts", array( $this, "downloads_by_category" ) );
 		add_action( 'delete_post', array( $this, 'delete_post' ) );
 		add_filter( 'enter_title_here', array( $this, 'enter_title_here' ), 1, 2 );
-		add_filter( 'manage_edit-dlm_download_columns', array( $this, 'columns' ) );
-		add_action( 'manage_dlm_download_posts_custom_column', array( $this, 'custom_columns' ), 2 );
+		add_filter( 'manage_edit-pirenko_portfolios_columns', array( $this, 'columns' ) );
+		add_action( 'manage_pirenko_portfolios_posts_custom_column', array( $this, 'custom_columns' ), 2 );
 		add_filter( 'post_updated_messages', array( $this, 'post_updated_messages' ) );
-		add_filter( 'manage_edit-dlm_download_sortable_columns', array( $this, 'sortable_columns' ) );
+		add_filter( 'manage_edit-pirenko_portfolios_sortable_columns', array( $this, 'sortable_columns' ) );
 		add_filter( 'request', array( $this, 'sort_columns' ) );
 	}
 
@@ -37,7 +37,7 @@ class DLM_Admin_CPT {
 	public function downloads_by_category( $show_counts = 1, $hierarchical = 1, $show_uncategorized = 1, $orderby = '' ) {
 		global $typenow, $wp_query;
 
-	    if ( $typenow != 'media' )
+	    if ( $typenow != 'pirenko_portfolios' )
 	    	return;
 
 		include_once( 'class-dlm-category-walker.php' );
@@ -47,7 +47,7 @@ class DLM_Admin_CPT {
 		$r['hierarchical'] 	= $hierarchical;
 		$r['hide_empty'] 	= 1;
 		$r['show_count'] 	= $show_counts;
-		$r['selected'] 		= ( isset( $wp_query->query['dlm_download_category'] ) ) ? $wp_query->query['dlm_download_category'] : '';
+		$r['selected'] 		= ( isset( $wp_query->query['pirenko_portfolios_category'] ) ) ? $wp_query->query['pirenko_portfolios_category'] : '';
 
 		$r['menu_order'] = false;
 
@@ -56,12 +56,12 @@ class DLM_Admin_CPT {
 		elseif ( $orderby )
 			$r['orderby'] = $orderby;
 
-		$terms = get_terms( 'dlm_download_category', $r );
+		$terms = get_terms( 'pirenko_portfolios_category', $r );
 
 		if (!$terms) return;
 
-		$output  = "<select name='dlm_download_category' id='dropdown_dlm_download_category'>";
-		$output .= '<option value="" ' .  selected( isset( $_GET['dlm_download_category'] ) ? $_GET['dlm_download_category'] : '', '', false ) . '>'.__( 'Select a category', 'download_monitor' ).'</option>';
+		$output  = "<select name='pirenko_portfolios_category' id='dropdown_pirenko_portfolios_category'>";
+		$output .= '<option value="" ' .  selected( isset( $_GET['pirenko_portfolios_category'] ) ? $_GET['pirenko_portfolios_category'] : '', '', false ) . '>'.__( 'Select a category', 'download_monitor' ).'</option>';
 		$output .= $this->walk_category_dropdown_tree( $terms, 0, $r );
 		$output .="</select>";
 
@@ -103,8 +103,8 @@ class DLM_Admin_CPT {
 			$post_type = get_post_type( $id );
 
 			switch( $post_type ) {
-				case 'media' :
-					if ( $versions =& get_children( 'post_parent=' . $id . '&post_type=media_file' ) )
+				case 'pirenko_portfolios' :
+					if ( $versions =& get_children( 'post_parent=' . $id . '&post_type=pirenko_portfolios_version' ) )
 						if ( $versions )
 							foreach ( $versions as $child )
 								wp_delete_post( $child->ID, true );
@@ -120,7 +120,7 @@ class DLM_Admin_CPT {
 	 * @return void
 	 */
 	public function enter_title_here( $text, $post ) {
-		if ( $post->post_type == 'media' )
+		if ( $post->post_type == 'pirenko_portfolios' )
 			return __( 'Download title', 'download_monitor' );
 		return $text;
 	}
@@ -135,7 +135,7 @@ class DLM_Admin_CPT {
 	public function post_updated_messages( $messages ) {
 		global $post, $post_ID;
 
-		$messages['media'] = array(
+		$messages['pirenko_portfolios'] = array(
 			0 => '', // Unused. Messages start at index 1.
 			1 => __('Download updated.', 'download_monitor'),
 			2 => __('Custom field updated.', 'download_monitor'),
@@ -205,10 +205,10 @@ class DLM_Admin_CPT {
 				echo $post->ID;
 			break;
 			case "download_cat" :
-				if ( ! $terms = get_the_term_list( $post->ID, 'dlm_download_category', '', ', ', '' ) ) echo '<span class="na">&ndash;</span>'; else echo $terms;
+				if ( ! $terms = get_the_term_list( $post->ID, 'pirenko_portfolios_category', '', ', ', '' ) ) echo '<span class="na">&ndash;</span>'; else echo $terms;
 			break;
 			case "download_tag" :
-				if ( ! $terms = get_the_term_list( $post->ID, 'dlm_download_tag', '', ', ', '' ) ) echo '<span class="na">&ndash;</span>'; else echo $terms;
+				if ( ! $terms = get_the_term_list( $post->ID, 'pirenko_portfolios_tag', '', ', ', '' ) ) echo '<span class="na">&ndash;</span>'; else echo $terms;
 			break;
 			case "featured" :
 
@@ -295,7 +295,7 @@ class DLM_Admin_CPT {
 
 			elseif ( 'download_count' == $vars['orderby'] )
 				$vars = array_merge( $vars, array(
-					'meta_key' 	=> 'download_count',
+					'meta_key' 	=> '_download_count',
 					'orderby' 	=> 'meta_value_num'
 				) );
 

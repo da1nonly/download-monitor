@@ -26,13 +26,13 @@ class DLM_Admin_Writepanels {
 	 * @return void
 	 */
 	public function add_meta_boxes() {
-		add_meta_box( 'download-monitor-options', __( 'Download Options', 'download_monitor' ), array( $this, 'download_options' ), 'media', 'side', 'high' );
-		add_meta_box( 'download-monitor-file', __( 'Downloadable File Versions', 'download_monitor' ), array( $this, 'download_files' ), 'media', 'normal', 'high' );
+		add_meta_box( 'download-monitor-options', __( 'Download Options', 'download_monitor' ), array( $this, 'download_options' ), 'pirenko_portfolios', 'side', 'high' );
+		add_meta_box( 'download-monitor-file', __( 'Downloadable File Versions', 'download_monitor' ), array( $this, 'download_files' ), 'pirenko_portfolios', 'normal', 'high' );
 
 		// Excerpt
 		if ( function_exists('wp_editor') ) {
-			remove_meta_box( 'postexcerpt', 'media', 'normal' );
-			add_meta_box( 'postexcerpt', __('Short Description', 'download_monitor'), array( $this, 'short_description' ), 'media', 'normal', 'high' );
+			remove_meta_box( 'postexcerpt', 'pirenko_portfolios', 'normal' );
+			add_meta_box( 'postexcerpt', __('Short Description', 'download_monitor'), array( $this, 'short_description' ), 'pirenko_portfolios', 'normal', 'high' );
 		}
 	}
 
@@ -85,7 +85,7 @@ class DLM_Admin_Writepanels {
 		global $post, $download_monitor;
 
 		wp_nonce_field( 'save_meta_data', 'dlm_nonce' );
-		?>
+?>
 		<div class="download_monitor_files dlm-metaboxes-wrapper">
 
 			<p class="toolbar">
@@ -95,29 +95,29 @@ class DLM_Admin_Writepanels {
 
 			<div class="dlm-metaboxes downloadable_files">
 				<?php
-					$i     = -1;
-					$files = get_posts( 'post_parent=' . $post->ID . '&post_type=media_file&orderby=menu_order&order=ASC&post_status=any&numberposts=-1' );
+		$i     = -1;
+		$files = get_posts( 'post_parent=' . $post->ID . '&post_type=pirenko_portfolios_version&orderby=menu_order&order=ASC&post_status=any&numberposts=-1' );
 
-					if ( $files ) foreach ( $files as $file ) {
+		if ( $files ) foreach ( $files as $file ) {
 
-						$i++;
-						$file_id    = $file->ID;
-						$file_version 	= ( $file_version = get_post_meta( $file->ID, 'version', true ) ) ? $file_version : '';
-						$file_duration 	= ( $file_duration = get_post_meta( $file->ID, 'duration', true ) ) ? $file_duration : '';
-						$file_name = get_the_title($file->ID);
-						$file_post_date = $file->post_date;
-						$file_download_count 		= absint( get_post_meta( $file->ID, 'download_count', true ) );
-						$file_urls      = array_filter( (array) get_post_meta( $file->ID, 'files', true ) );
+				$i++;
+				$file_id    = $file->ID;
+				$file_version  = ( $file_version = get_post_meta( $file->ID, '_version', true ) ) ? $file_version : '';
+				$file_duration  = ( $file_duration = get_post_meta( $file->ID, 'duration', true ) ) ? $file_duration : '';
+				$file_name = get_the_title($file->ID);
+				$file_post_date = $file->post_date;
+				$file_download_count   = absint( get_post_meta( $file->ID, '_download_count', true ) );
+				$file_urls      = array_filter( (array) get_post_meta( $file->ID, '_files', true ) );
 
-						include( 'html-downloadable-file-version.php' );
-					}
-				?>
+				include( 'html-downloadable-file-version.php' );
+			}
+?>
 			</div>
 
 		</div>
 		<?php
 		ob_start();
-		?>
+?>
 		jQuery(function(){
 
 			// Expand all files
@@ -330,7 +330,7 @@ class DLM_Admin_Writepanels {
 				// Set post to 0 and set our custom type
 				dlm_upload_file_frame.on( 'ready', function() {
 					dlm_upload_file_frame.uploader.options.uploader.params = {
-						type: 'media'
+						type: 'pirenko_portfolios'
 					};
 				});
 
@@ -353,12 +353,12 @@ class DLM_Admin_Writepanels {
 	 */
 	public function short_description( $post ) {
 		$settings = array(
-			'quicktags' 	=> array( 'buttons' => 'em,strong,link' ),
-			'textarea_name'	=> 'excerpt',
-			'quicktags' 	=> true,
-			'tinymce' 		=> true,
-			'editor_css'	=> '<style>#wp-excerpt-editor-container .wp-editor-area{height:200px; width:100%;}</style>'
-			);
+			'quicktags'  => array( 'buttons' => 'em,strong,link' ),
+			'textarea_name' => 'excerpt',
+			'quicktags'  => true,
+			'tinymce'   => true,
+			'editor_css' => '<style>#wp-excerpt-editor-container .wp-editor-area{height:200px; width:100%;}</style>'
+		);
 
 		wp_editor( htmlspecialchars_decode( $post->post_excerpt ), 'excerpt', $settings );
 	}
@@ -378,7 +378,7 @@ class DLM_Admin_Writepanels {
 		if ( is_int( wp_is_post_autosave( $post ) ) ) return;
 		if ( empty($_POST['dlm_nonce']) || ! wp_verify_nonce( $_POST['dlm_nonce'], 'save_meta_data' ) ) return;
 		if ( ! current_user_can( 'edit_post', $post_id ) ) return;
-		if ( $post->post_type != 'media' ) return;
+		if ( $post->post_type != 'pirenko_portfolios' ) return;
 
 		do_action( 'dlm_save_meta_boxes', $post_id, $post );
 	}
@@ -408,16 +408,16 @@ class DLM_Admin_Writepanels {
 		// Process files
 		if ( isset( $_POST['downloadable_file_id'] ) ) {
 
-			$downloadable_file_id 			= $_POST['downloadable_file_id'];
-			$downloadable_file_name 		= $_POST['downloadable_file_name'];
-			$downloadable_file_menu_order	= $_POST['downloadable_file_menu_order'];
-			$downloadable_file_version		= $_POST['downloadable_file_version'];
-			$downloadable_file_duration		= $_POST['downloadable_file_duration'];
-			$downloadable_file_urls			= $_POST['downloadable_file_urls'];
-			$downloadable_file_date			= $_POST['downloadable_file_date'];
-			$downloadable_file_date_hour	= $_POST['downloadable_file_date_hour'];
-			$downloadable_file_date_minute	= $_POST['downloadable_file_date_minute'];
-			$downloadable_file_download_count			= $_POST['downloadable_file_download_count'];
+			$downloadable_file_id    = $_POST['downloadable_file_id'];
+			$downloadable_file_name   = $_POST['downloadable_file_name'];
+			$downloadable_file_menu_order = $_POST['downloadable_file_menu_order'];
+			$downloadable_file_version  = $_POST['downloadable_file_version'];
+			$downloadable_file_urls   = $_POST['downloadable_file_urls'];
+			$downloadable_file_duration  = $_POST['downloadable_file_duration'];
+			$downloadable_file_date   = $_POST['downloadable_file_date'];
+			$downloadable_file_date_hour = $_POST['downloadable_file_date_hour'];
+			$downloadable_file_date_minute = $_POST['downloadable_file_date_minute'];
+			$downloadable_file_download_count   = $_POST['downloadable_file_download_count'];
 
 			for ( $i = 0; $i <= max( array_keys( $downloadable_file_id ) ); $i ++ ) {
 
@@ -425,9 +425,9 @@ class DLM_Admin_Writepanels {
 					continue;
 
 				$file_id             = absint( $downloadable_file_id[ $i ] );
-				$file_name			 = sanitize_text_field( $downloadable_file_name[ $i ] );
+				$file_name    = sanitize_text_field( $downloadable_file_name[ $i ] );
 				$file_menu_order     = absint( $downloadable_file_menu_order[ $i ] );
-				$file_version        = strtolower( sanitize_text_field( $downloadable_file_version[ $i ] ) );
+				$file_version   = strtolower( sanitize_text_field( $downloadable_file_version[ $i ] ) );
 				$file_duration        = strtolower( sanitize_text_field( $downloadable_file_duration[ $i ] ) );
 				$file_date_hour      = absint( $downloadable_file_date_hour[ $i ] );
 				$file_date_minute    = absint( $downloadable_file_date_minute[ $i ] );
@@ -450,16 +450,16 @@ class DLM_Admin_Writepanels {
 
 				// Update
 				$wpdb->update( $wpdb->posts, array(
-					'post_status' => 'publish',
-					'post_title'  => $file_post_title,
-					//'menu_order'  => $file_menu_order,
-					'post_date'   => date( 'Y-m-d H:i:s', $date )
-				), array( 'ID' => $file_id ) );
+						'post_status' => 'publish',
+						'post_title'  => $file_post_title,
+						//'menu_order'  => $file_menu_order,
+						'post_date'   => date( 'Y-m-d H:i:s', $date )
+					), array( 'ID' => $file_id ) );
 
 				// Update post meta
 				update_post_meta( $file_id, 'duration', $file_duration );
-				update_post_meta( $file_id, 'version', $file_version );
-				update_post_meta( $file_id, 'files', $files );
+				update_post_meta( $file_id, '_version', $file_version );
+				update_post_meta( $file_id, '_files', $files );
 
 				$filesize       = -1;
 				$main_file_path = current( $files );
@@ -467,19 +467,19 @@ class DLM_Admin_Writepanels {
 				if ( $main_file_path )
 					$filesize = $download_monitor->get_filesize( $main_file_path );
 
-				update_post_meta( $file_id, 'filesize', $filesize );
+				update_post_meta( $file_id, '_filesize', $filesize );
 
 				if ( $file_download_count !== '' ) {
-					update_post_meta( $file_id, 'download_count', absint( $file_download_count ) );
+					update_post_meta( $file_id, '_download_count', absint( $file_download_count ) );
 					$total_download_count += absint( $file_download_count );
 				} else {
-					$total_download_count += absint( get_post_meta( $file_id, 'download_count', true ) );
+					$total_download_count += absint( get_post_meta( $file_id, '_download_count', true ) );
 				}
 			}
 		}
 
 		// Sync download_count
-		update_post_meta( $post_id, 'download_count', $total_download_count );
+		update_post_meta( $post_id, '_download_count', $total_download_count );
 	}
 }
 

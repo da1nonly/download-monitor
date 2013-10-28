@@ -33,8 +33,8 @@ class DLM_Shortcodes {
 		return $wpdb->get_var( "
 			SELECT SUM( meta_value ) FROM $wpdb->postmeta
 			LEFT JOIN $wpdb->posts on $wpdb->postmeta.post_id = $wpdb->posts.ID
-			WHERE meta_key = 'download_count'
-			AND post_type = 'media'
+			WHERE meta_key = '_download_count'
+			AND post_type = 'pirenko_portfolios'
 			AND post_status = 'publish'
 		" );
 	}
@@ -46,7 +46,7 @@ class DLM_Shortcodes {
 	 * @return void
 	 */
 	public function total_files() {
-		$count_posts = wp_count_posts( 'media' );
+		$count_posts = wp_count_posts( 'pirenko_portfolios' );
 
 		return $count_posts->publish;
 	}
@@ -59,7 +59,7 @@ class DLM_Shortcodes {
 	 * @return void
 	 */
 	public function download( $atts, $content = '' ) {
-		global $download_monitor, $dlm_download;
+		global $download_monitor, $pirenko_portfolios;
 
 		extract( shortcode_atts( array(
 			'id'         => '',
@@ -82,10 +82,10 @@ class DLM_Shortcodes {
 	  		if ( $download->exists() ) {
 
 		  		if ( $version )
-					$version_id = $dlm_download->get_version_id( $version );
+					$version_id = $pirenko_portfolios->get_version_id( $version );
 
 				if ( $version_id )
-					$dlm_download->set_version( $version_id );
+					$pirenko_portfolios->set_version( $version_id );
 
 				return '<a href="' . $download->get_the_download_link() . '">' . $content . '</a>';
 
@@ -100,7 +100,7 @@ class DLM_Shortcodes {
 	  		ob_start();
 
 			$downloads = new WP_Query( array(
-		    	'post_type'      => 'media',
+		    	'post_type'      => 'pirenko_portfolios',
 		    	'posts_per_page' => 1,
 		    	'no_found_rows'  => 1,
 		    	'post_status'    => 'publish',
@@ -113,10 +113,10 @@ class DLM_Shortcodes {
 					$downloads->the_post();
 
 					if ( $version )
-						$version_id = $dlm_download->get_version_id( $version );
+						$version_id = $pirenko_portfolios->get_version_id( $version );
 
 					if ( $version_id )
-						$dlm_download->set_version( $version_id );
+						$pirenko_portfolios->set_version( $version_id );
 
 					$download_monitor->get_template_part( 'content-download', $template );
 				}
@@ -201,9 +201,9 @@ class DLM_Shortcodes {
 
 			// Taxonomies
 			case 'tags' :
-				return get_the_term_list( $id, 'dlm_download_tags', '', ', ', '' );
+				return get_the_term_list( $id, 'pirenko_portfolios_tags', '', ', ', '' );
 			case 'categories' :
-				return get_the_term_list( $id, 'dlm_download_category', '', ', ', '' );
+				return get_the_term_list( $id, 'pirenko_portfolios_category', '', ', ', '' );
 		}
 	}
 
@@ -260,7 +260,7 @@ class DLM_Shortcodes {
 			case 'count' :
 			case 'download_count' :
 				$orderby  = 'meta_value';
-				$meta_key = 'download_count';
+				$meta_key = '_download_count';
 				break;
 			default :
 				$orderby = 'title';
@@ -268,7 +268,7 @@ class DLM_Shortcodes {
 		}
 
 	  	$args = array(
-	    	'post_type'      => 'media',
+	    	'post_type'      => 'pirenko_portfolios',
 	    	'posts_per_page' => $per_page,
 	    	'offset'         => $offset,
 	    	'no_found_rows'  => 1,
@@ -289,7 +289,7 @@ class DLM_Shortcodes {
 
 		  	if ( ! empty( $categories ) ) {
 			  	$args['tax_query'][] = array(
-					'taxonomy'         => 'dlm_download_category',
+					'taxonomy'         => 'pirenko_portfolios_category',
 					'field'            => 'slug',
 					'terms'            => $categories,
 					'include_children' => $category_include_children
@@ -298,7 +298,7 @@ class DLM_Shortcodes {
 
 		  	if ( ! empty( $tags ) ) {
 			  	$args['tax_query'][] = array(
-			  		'taxonomy' => 'dlm_download_tag',
+			  		'taxonomy' => 'pirenko_portfolios_tag',
 					'field'    => 'slug',
 					'terms'    => $tags
 			  	);
